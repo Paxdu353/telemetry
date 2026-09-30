@@ -5,52 +5,64 @@ on:
     branches: [main]
   workflow_dispatch:
   pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 jobs:
   lint:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
-      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4
+
+      - uses: ./.github/actions/setup
         with:
-          enable-cache: true
-      - run: uv sync
+          python-version: "3.12"
+
       - run: uv run ruff check .
       - run: uv run ruff format --check .
 
 
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ '3.12', '3.13', '3.14' ]
+        python-version: [ "3.12", "3.13", "3.14" ]
+
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+
+      - uses: ./.github/actions/setup
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4
-        with:
-          enable-cache: true
 
-      - run: uv sync
       - run: uv run pytest --cov=fleet_api --cov-report=html
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v7
         with:
-          name: coverage-html-${{ matrix.python-version }}
+          name: coverage-${{ matrix.python-version }}
           path: htmlcov/
           retention-days: 7
 
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    needs: [lint, test]
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
-      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4
+
+      - uses: ./.github/actions/setup
         with:
-          enable-cache: true
-      - run: uv sync
+          python-version: "3.12"
+
       - run: uv build
