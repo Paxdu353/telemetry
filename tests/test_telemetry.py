@@ -7,8 +7,16 @@ Tout le reste est à écrire — voir le TD 1.
 import pytest
 
 from fleet_api.models import Position, Reading, RobotState
-from fleet_api.telemetry import battery_percentage, distance_m, is_low_battery, path_length_m, average_speed_mps, \
-    estimate_runtime_minutes, median_voltage_mv, fleet_summary, detect_voltage_dropouts, robot_state
+from fleet_api.telemetry import (battery_percentage,
+                                 distance_m,
+                                 is_low_battery,
+                                 path_length_m,
+                                 average_speed_mps,
+                                estimate_runtime_minutes,
+                                 median_voltage_mv,
+                                 fleet_summary,
+                                 detect_voltage_dropouts,
+                                 robot_state)
 
 
 # ---------------------------------------------------------------------------

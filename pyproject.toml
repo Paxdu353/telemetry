@@ -39,6 +39,7 @@ src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "PT"]
+ignore = ["PT006", "E501"]
 
 [tool.ruff.lint.flake8-bugbear]
 # `Depends()` en valeur par défaut est le mécanisme d'injection de FastAPI :
