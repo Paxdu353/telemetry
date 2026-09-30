@@ -2,20 +2,15 @@ name: CI
 
 on:
   push:
+    branches: [main]
   workflow_dispatch:
   pull_request:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: [ '3.12', '3.13', '3.14' ]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
-        with:
-          python-version: ${{ matrix.python-version }}
       - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4
         with:
           enable-cache: true
@@ -51,15 +46,9 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: [ '3.12', '3.13', '3.14' ]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
-        with:
-          python-version: ${{ matrix.python-version }}
       - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4
         with:
           enable-cache: true
