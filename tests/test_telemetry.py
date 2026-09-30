@@ -20,7 +20,6 @@ from fleet_api.telemetry import (
     robot_state,
 )
 
-
 # ---------------------------------------------------------------------------
 # Exemple 1 — un test simple, avec un cas nominal et les deux bornes.
 # ---------------------------------------------------------------------------
