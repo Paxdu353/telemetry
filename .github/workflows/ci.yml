@@ -35,13 +35,17 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4
-        id: setup-uv
         with:
           enable-cache: true
 
-      - run: echo "Cache hit = ${{ steps.setup-uv.outputs.cache-hit }}"
       - run: uv sync
-      - run: uv run pytest
+      - run: uv run pytest --cov=fleet_api --cov-report=html
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-html-${{ matrix.python-version }}
+          path: htmlcov/
 
   build:
     runs-on: ubuntu-latest
