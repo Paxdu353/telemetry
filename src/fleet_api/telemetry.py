@@ -83,7 +83,7 @@ def is_low_battery(battery_pct: float, threshold_pct: float = LOW_BATTERY_PCT) -
         False
     """
     # TODO: à tester
-    return battery_pct < threshold_pct  # Bug manquement =
+    return battery_pct <= threshold_pct  # Bug manquement =
 
 
 def distance_m(a: Position, b: Position) -> float:
