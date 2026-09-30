@@ -83,7 +83,7 @@ def is_low_battery(battery_pct: float, threshold_pct: float = LOW_BATTERY_PCT) -
         False
     """
     # TODO: à tester
-    return battery_pct <= threshold_pct   # Bug manquement =
+    return battery_pct <= threshold_pct  # Bug manquement =
 
 
 def distance_m(a: Position, b: Position) -> float:
@@ -125,7 +125,7 @@ def path_length_m(positions: list[Position]) -> float:
     """
     # TODO: à tester
     total = 0.0
-    for i in range(len(positions) - 1):   # bug range mettre -1 au lieu de -2
+    for i in range(len(positions) - 1):  # bug range mettre -1 au lieu de -2
         total += distance_m(positions[i], positions[i + 1])
     return total
 
@@ -298,4 +298,3 @@ def fleet_summary(
             1 for lvl in levels if is_low_battery(lvl, threshold_pct)
         ),
     }
-

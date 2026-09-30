@@ -71,6 +71,7 @@ def test_battery_percentage_rejette_des_bornes_incoherentes():
 # Trois de ces fonctions ne respectent pas leur spécification.
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.parametrize(
     "battery_pct, threshold_pct, expected",
     [
@@ -81,7 +82,6 @@ def test_battery_percentage_rejette_des_bornes_incoherentes():
 )
 def test_is_low_battery(battery_pct, threshold_pct, expected):
     assert is_low_battery(battery_pct, threshold_pct) is expected
-
 
 
 @pytest.mark.parametrize(
@@ -114,7 +114,6 @@ def test_average_speed_mps(path_length_m, elapsed_s, expected):
         (50.0, 0.0, None),
     ],
 )
-
 def test_estimate_runtime_minutes(battery_pct, drain_pct_per_min, expected):
     assert estimate_runtime_minutes(battery_pct, drain_pct_per_min) == expected
 
@@ -142,8 +141,6 @@ def test_median_voltage_mv(values, expected):
     assert median_voltage_mv(readings) == expected
 
 
-
-
 def make_reading(
     voltage_mv=12000,
     timestamp_s=100.0,
@@ -162,30 +159,49 @@ def make_reading(
     "reading, now_s, threshold_pct, grace_s, expected",
     [
         # OFFLINE prioritaire sur tout
-        (make_reading(voltage_mv=9000, timestamp_s=0, is_charging=True), 200, 20, 100, RobotState.OFFLINE),
-
+        (
+            make_reading(voltage_mv=9000, timestamp_s=0, is_charging=True),
+            200,
+            20,
+            100,
+            RobotState.OFFLINE,
+        ),
         # CHARGING avant LOW_BATTERY
-        (make_reading(voltage_mv=9000, timestamp_s=100, is_charging=True), 150, 20, 100, RobotState.CHARGING),
-
+        (
+            make_reading(voltage_mv=9000, timestamp_s=100, is_charging=True),
+            150,
+            20,
+            100,
+            RobotState.CHARGING,
+        ),
         # LOW_BATTERY
-        (make_reading(voltage_mv=9000, timestamp_s=100, is_charging=False), 150, 20, 100, RobotState.LOW_BATTERY),
-
+        (
+            make_reading(voltage_mv=9000, timestamp_s=100, is_charging=False),
+            150,
+            20,
+            100,
+            RobotState.LOW_BATTERY,
+        ),
         # OPERATIONAL
-        (make_reading(voltage_mv=12000, timestamp_s=100, is_charging=False), 150, 20, 100, RobotState.OPERATIONAL),
+        (
+            make_reading(voltage_mv=12000, timestamp_s=100, is_charging=False),
+            150,
+            20,
+            100,
+            RobotState.OPERATIONAL,
+        ),
     ],
 )
 def test_robot_state(reading, now_s, threshold_pct, grace_s, expected):
     assert robot_state(reading, now_s, threshold_pct, grace_s) == expected
 
 
-
-
 @pytest.mark.parametrize(
     "voltages, max_drop_mv, expected",
     [
-        ([12000, 11000], 500, [1]),      # chute de 1000
-        ([12000, 11500], 500, []),       # exactement 500 => pas anormal
-        ([12000, 12500], 500, []),       # remontée
+        ([12000, 11000], 500, [1]),  # chute de 1000
+        ([12000, 11500], 500, []),  # exactement 500 => pas anormal
+        ([12000, 12500], 500, []),  # remontée
         ([12000, 11000, 9000], 500, [1, 2]),
         ([12000], 500, []),
         ([], 500, []),
@@ -193,12 +209,10 @@ def test_robot_state(reading, now_s, threshold_pct, grace_s, expected):
 )
 def test_detect_voltage_dropouts(voltages, max_drop_mv, expected):
     readings = [
-        make_reading(voltage_mv=v, timestamp_s=i)
-        for i, v in enumerate(voltages)
+        make_reading(voltage_mv=v, timestamp_s=i) for i, v in enumerate(voltages)
     ]
 
     assert detect_voltage_dropouts(readings, max_drop_mv) == expected
-
 
 
 def test_fleet_summary_empty():
@@ -207,7 +221,6 @@ def test_fleet_summary_empty():
         "average_battery_pct": 0.0,
         "low_battery_count": 0,
     }
-
 
 
 def test_fleet_summary():
