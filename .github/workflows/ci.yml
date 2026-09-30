@@ -40,7 +40,7 @@ jobs:
       - name: Upload coverage report
         uses: actions/upload-artifact@v7
         with:
-          name: coverage-html-${{ matrix.python-version }}
+          name: test
           path: htmlcov/
           retention-days: 7
 
